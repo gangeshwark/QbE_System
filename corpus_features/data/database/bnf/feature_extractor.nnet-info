@@ -1,0 +1,35 @@
+num-components 15
+input-dim 25
+output-dim 30
+number-of-parameters 5.75995 millions
+component 1 : <Splice>, input-dim 25, output-dim 275, 
+  frame_offsets [ -5 -4 -3 -2 -1 0 1 2 3 4 5 ]
+component 2 : <AffineTransform>, input-dim 275, output-dim 275, 
+  linearity ( min -0.426401, max 0.426401, mean 0.000443373, stddev 0.0378848, skewness 1.07283, kurtosis 74.6446 ) , lr-coef 1, max-norm 0
+  bias ( min 0, max 0, mean 0, stddev 0, skewness -nan, kurtosis -nan ) , lr-coef 1
+component 3 : <AddShift>, input-dim 275, output-dim 275, 
+  shift_data ( min -0.0154109, max 0.00745502, mean -0.000544294, stddev 0.00394441, skewness -1.9692, kurtosis 5.41677 ) , lr-coef 0
+component 4 : <Rescale>, input-dim 275, output-dim 275, 
+  scale_data ( min 0.43927, max 42.7371, mean 7.57281, stddev 5.9853, skewness 1.50829, kurtosis 5.23846 ) , lr-coef 0
+component 5 : <AffineTransform>, input-dim 275, output-dim 1500, 
+  linearity ( min -20.9087, max 29.9146, mean -0.00218854, stddev 0.912615, skewness 1.46444, kurtosis 63.5813 ) , lr-coef 1, max-norm 0
+  bias ( min -12.5944, max 3.05278, mean -5.96132, stddev 2.26038, skewness 0.195395, kurtosis -0.28301 ) , lr-coef 1
+component 6 : <Sigmoid>, input-dim 1500, output-dim 1500, 
+component 7 : <AffineTransform>, input-dim 1500, output-dim 1500, 
+  linearity ( min -8.23928, max 4.10395, mean -0.0231675, stddev 0.244328, skewness -1.25259, kurtosis 18.9774 ) , lr-coef 1, max-norm 0
+  bias ( min -9.33403, max 3.03468, mean -2.55505, stddev 1.71527, skewness -0.00802619, kurtosis 0.182637 ) , lr-coef 1
+component 8 : <Sigmoid>, input-dim 1500, output-dim 1500, 
+component 9 : <LinearTransform>, input-dim 1500, output-dim 80, 
+  linearity ( min -2.62697, max 2.02584, mean -0.000364631, stddev 0.166696, skewness -0.000773126, kurtosis 6.23761 ) , lr-coef 0.1
+component 10 : <Splice>, input-dim 80, output-dim 400, 
+  frame_offsets [ -10 -5 0 5 10 ]
+component 11 : <AffineTransform>, input-dim 400, output-dim 1500, 
+  linearity ( min -7.41253, max 7.24115, mean 0.00659037, stddev 0.881794, skewness 0.00733754, kurtosis 2.26275 ) , lr-coef 1, max-norm 0
+  bias ( min -4.82429, max 0.0732614, mean -2.30898, stddev 1.17344, skewness -0.0272429, kurtosis -1.11729 ) , lr-coef 1
+component 12 : <Sigmoid>, input-dim 1500, output-dim 1500, 
+component 13 : <AffineTransform>, input-dim 1500, output-dim 1500, 
+  linearity ( min -4.26302, max 8.42105, mean -0.0340453, stddev 0.273237, skewness -0.30266, kurtosis 3.61591 ) , lr-coef 1, max-norm 0
+  bias ( min -6.16803, max 1.41591, mean -2.90969, stddev 1.27731, skewness 0.0240238, kurtosis -0.534377 ) , lr-coef 1
+component 14 : <Sigmoid>, input-dim 1500, output-dim 1500, 
+component 15 : <LinearTransform>, input-dim 1500, output-dim 30, 
+  linearity ( min -2.38941, max 1.74024, mean -0.00485804, stddev 0.195952, skewness -0.135237, kurtosis 4.33887 ) , lr-coef 0.1

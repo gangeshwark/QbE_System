@@ -1,0 +1,19 @@
+# paste-feats --length-tolerance=2 "ark:extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- | compute-fbank-feats  --verbose=2 --config=conf/fbank22.conf ark:- ark:- |" "ark,s,cs:extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- | compute-kaldi-pitch-feats --verbose=2 --config=conf/pitch.conf ark:- ark:- | process-kaldi-pitch-feats  ark:- ark:- |" ark:- | copy-feats --compress=true ark:- ark,scp:/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/raw_fbank_pitch_fbank_pitch.1.ark,/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/raw_fbank_pitch_fbank_pitch.1.scp 
+# Started at Tue Jan 24 16:35:12 SGT 2017
+#
+copy-feats --compress=true ark:- ark,scp:/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/raw_fbank_pitch_fbank_pitch.1.ark,/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/raw_fbank_pitch_fbank_pitch.1.scp 
+paste-feats --length-tolerance=2 'ark:extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- | compute-fbank-feats  --verbose=2 --config=conf/fbank22.conf ark:- ark:- |' 'ark,s,cs:extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- | compute-kaldi-pitch-feats --verbose=2 --config=conf/pitch.conf ark:- ark:- | process-kaldi-pitch-feats  ark:- ark:- |' ark:- 
+extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- 
+compute-fbank-feats --verbose=2 --config=conf/fbank22.conf ark:- ark:- 
+LOG (extract-segments[5.0.30~1-61510]:main():extract-segments.cc:194) Successfully processed 1 lines out of 1 in the segments file. 
+VLOG[2] (compute-fbank-feats[5.0.30~1-61510]:main():compute-fbank-feats.cc:175) Processed features for key spk01_my4Hellow
+LOG (compute-fbank-feats[5.0.30~1-61510]:main():compute-fbank-feats.cc:178)  Done 1 out of 1 utterances.
+extract-segments scp,p:outdir/data/database/fbank_pitch/wav.scp outdir/fbank_pitch_database/log/segments.1 ark:- 
+process-kaldi-pitch-feats ark:- ark:- 
+compute-kaldi-pitch-feats --verbose=2 --config=conf/pitch.conf ark:- ark:- 
+LOG (extract-segments[5.0.30~1-61510]:main():extract-segments.cc:194) Successfully processed 1 lines out of 1 in the segments file. 
+LOG (compute-kaldi-pitch-feats[5.0.30~1-61510]:main():compute-kaldi-pitch-feats.cc:111) Done 1 utterances, 0 with errors.
+LOG (process-kaldi-pitch-feats[5.0.30~1-61510]:main():process-kaldi-pitch-feats.cc:85) Post-processed pitch for 1 utterances.
+LOG (paste-feats[5.0.30~1-61510]:main():paste-feats.cc:158) Done 1 utts, errors on 0
+LOG (copy-feats[5.0.30~1-61510]:main():copy-feats.cc:120) Copied 1 feature matrices.
+# Ended (code 0) at Tue Jan 24 16:35:12 SGT 2017, elapsed time 0 seconds

@@ -1,0 +1,2 @@
+compute-cmvn-stats --spk2utt=ark:outdir/data/database/fbank_pitch/spk2utt scp:outdir/data/database/fbank_pitch/feats.scp ark,scp:/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/cmvn_fbank_pitch.ark,/home/gangeshwark/QbE_STD_demo/outdir/fbank_pitch_database/cmvn_fbank_pitch.scp 
+LOG (compute-cmvn-stats[5.0.30~1-61510]:main():compute-cmvn-stats.cc:171) Done accumulating CMVN stats for 1 utterances; 0 had errors.

@@ -1,0 +1,6 @@
+nnet-concat hierbn-nd-train80k/final.feature_transform 'nnet-copy --remove-last-components=4 hierbn-nd-train80k/final.nnet - |' /home/gangeshwark/QbE_STD_demo/outdir/bnf_database/feature_extractor.nnet 
+LOG (nnet-concat[5.0.30~1-61510]:main():nnet-concat.cc:53) Reading hierbn-nd-train80k/final.feature_transform
+LOG (nnet-concat[5.0.30~1-61510]:main():nnet-concat.cc:65) Concatenating nnet-copy --remove-last-components=4 hierbn-nd-train80k/final.nnet - |
+nnet-copy --remove-last-components=4 hierbn-nd-train80k/final.nnet - 
+LOG (nnet-copy[5.0.30~1-61510]:main():nnet-copy.cc:145) Written 'nnet1' to -
+LOG (nnet-concat[5.0.30~1-61510]:main():nnet-concat.cc:82) Written model to /home/gangeshwark/QbE_STD_demo/outdir/bnf_database/feature_extractor.nnet

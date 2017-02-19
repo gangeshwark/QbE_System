@@ -8,6 +8,8 @@ from flask import request
 from flask import url_for
 from werkzeug.utils import secure_filename
 
+from feature_extractor.run import FeatureExtractor
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = '/home/gangeshwark/PycharmProjects/QbE_System/uploads'
@@ -41,7 +43,16 @@ def upload_audio():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(path)
+            query_features_path = FeatureExtractor.bnf(path)
+            corpus_features_path = os.path.abspath('./corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
+            print corpus_features_path, query_features_path
+
+
+
+
+
             return url_for('upload_audio', filename=filename)
 
 
