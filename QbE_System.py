@@ -1,3 +1,4 @@
+import inspect
 import os
 
 from flask import Flask
@@ -5,6 +6,7 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import send_from_directory
 from flask import url_for
 from werkzeug.utils import secure_filename
 
@@ -20,7 +22,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def hello_world():
     data = "Hello World"
-    return render_template('index.html', name=data)
+    return render_template('test.html', name=data)
 
 
 def allowed_file(filename):
@@ -48,14 +50,15 @@ def upload_audio():
             query_features_path = FeatureExtractor.bnf(path)
             corpus_features_path = os.path.abspath('./corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
             print corpus_features_path, query_features_path
-
-
-
-
-
+            os.chdir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+            print os.getcwd()
             return url_for('upload_audio', filename=filename)
 
 
+@app.route('/static/<path:path>')
+def send(path):
+    return send_from_directory('client', path)
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)

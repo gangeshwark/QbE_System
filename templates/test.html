@@ -29,7 +29,7 @@
         <div class="mdl-layout__header-row">
             <span class="mdl-layout-title center-block">Query by Example: Spoken Term Detection</span>
             <div class="mdl-layout-spacer"></div>
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+            <!--<div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
                 <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
                     <i class="material-icons">search</i>
                 </label>
@@ -37,7 +37,7 @@
                     <input class="mdl-textfield__input" type="text" id="search">
                     <label class="mdl-textfield__label" for="search">Enter your query...</label>
                 </div>
-            </div>
+            </div>-->
         </div>
     </header>
     <div class="demo-ribbon"></div>
@@ -96,7 +96,7 @@
                 <div id="waveform"></div>
                 <div id="waveform-timeline"></div>
                 <div class="track" id="track-viz"></div>
-                <div class="track" id="track-1"></div>
+                <div class="track" id="track-play"></div>
             </div>
         </div>
         <footer class="demo-footer mdl-mini-footer">
@@ -112,11 +112,6 @@
 </div>
 
 </body>
-<!-- main wavesurfer.js lib -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/wavesurfer.min.js"></script>
-
-<!-- wavesurfer.js timeline -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.timeline.min.js"></script>
 
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -129,115 +124,76 @@
 <script src="{{ url_for('static', filename='js/waves-basic-controllers.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/waves-loaders.min.js') }}"></script>
 <script>
+    var sound = new Howl({
+        src: ['static/110101_000444_channel3.wav'],
+        sprite: {
+            blast: [30, 3000],
+            laser: [4000, 100000],
+            winner: [6000, 5000]
+        }
+    });
+
     var loader = new wavesLoaders.AudioBufferLoader();
 
     loader.load('static/110101_000444_channel3.wav').then(function (buffer) {
         var $track = document.querySelector('#track-viz');
-      var width = $track.getBoundingClientRect().width;
-      var height = 200;
-      var duration = buffer.duration;
-      // define the numbr of pixels per seconds the timeline should display
-      var pixelsPerSecond = width / duration;
-      // create a timeline
-      var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
-      // create a new track into the `track-1` element and give it a id ('main')
-      timeline.createTrack($track, height, 'main');
+        var width = $track.getBoundingClientRect().width;
+        var height = 200;
+        var duration = buffer.duration;
+        // define the numbr of pixels per seconds the timeline should display
+        var pixelsPerSecond = width / duration;
+        // create a timeline
+        var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+        // create a new track into the `track-1` element and give it a id ('main')
+        timeline.createTrack($track, height, 'main');
+        var data = [
+            {time: 2, text: 'label 1'},
+            {time: 50, text: 'label 2'},
+            {time: 600, text: 'label 3'},
+            {time: 800, text: 'label 4'}
+        ];
+        // create the layer
+        var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
+            height: height
+        });
 
-      // create the layer
-      var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
-        height: height
-      });
+        var markerLayer = new wavesUI.helpers.MarkerLayer(data, {
+            height: height,
+            displayHandlers: true,
+            color: 'red'
+        });
+        var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
+        markerLayer.setTimeContext(timeContext);
+        markerLayer.configureShape(wavesUI.shapes.AnnotatedMarker, {
+            x: function (d, v) {
+                if (v !== undefined) {
+                    d.time = v;
+                }
+                return d.time;
+            },
+            color: function () {
+                return 'orange';
+            }
+        });
+        markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());
 
-      // insert the layer inside the 'main' track
-      timeline.addLayer(waveformLayer, 'main');
-      // set the timeline's state to `BrushZoomState`
-      timeline.state = new wavesUI.states.BrushZoomState(timeline);
+
+        // insert the layer inside the 'main' track
+        timeline.addLayer(waveformLayer, 'main');
+        timeline.addLayer(markerLayer, 'main');
+        // set the timeline's state to `BrushZoomState`
+        timeline.state = new wavesUI.states.BrushZoomState(timeline);
+
+        timeline.tracks.render();
+        timeline.tracks.update();
 
 
-    }).catch(function(err) {
-      console.error(err.stack);
+    }).catch(function (err) {
+        console.error(err.stack);
     });
+    sound.play('laser');
 </script>
 
-<!--
-<script>
-    function callplay() {
-        var time_in = document.getElementById('time_in').value;
-        console.log(parseFloat(time_in));
-        //var arr = time_in.match(/^.*-.*$/g);
-        //console.log(arr[0]);
-        wavesurfer.play(parseFloat(time_in));
-    }
-    var timer = 0;
-    // Format time in minutes:seconds
-    function formatTimeWithMilli(time) {
-        time = time * 1000; //convert into milliseconds
-        var hour = Math.floor(time / (60 * 1000 * 60)),
-            minutes = Math.floor(time / (1000 * 60)),
-            seconds = Math.floor((time / 1000) % 60),
-            milli = Math.floor((time - (seconds * 1000)) / 10);
-
-        hour = hour < 10 ? '0' + hour : hour;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        milli = milli < 10 ? '0' + milli : milli;
-        return hour + ":" + minutes + ":" + seconds + ":" + milli;
-    }
-    function formatTime(time) {
-        time = time * 1000; //convert into milliseconds
-        var hour = Math.floor(time / (60 * 1000 * 60)),
-            minutes = Math.floor(time / (1000 * 60)),
-            seconds = Math.floor((time / 1000) % 60);
-
-        hour = hour < 10 ? '0' + hour : hour;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        return hour + ":" + minutes + ":" + seconds;
-    }
-    /*
-    var wavesurfer = WaveSurfer.create({
-        container: '#waveform',
-        waveColor: 'red',
-        progressColor: 'purple',
-        height: 128,
-        maxCanvasWidth: 128,
-        //splitChannels: true
-    });
-    */
-    //wavesurfer.load('../data/my4Hellow.wav');
-    wavesurfer.load('static/110101_000444.WAV');
-    //wavesurfer.load('http://rnb-live.wapka.me/music/down/47048909/2012991/MjQ0OXNuOExWTktHWk9BMVByOHZsUFJlb001UTh3WTFla2dpNmxmN0lkT3ZFL2pkV3c=/The+Chainsmokers+-+Closer+%28feat.+Halsey%29.mp3');
-
-
-    var slider = document.querySelector('#slider');
-
-    slider.oninput = function () {
-        var zoomLevel = Number(slider.value);
-        wavesurfer.zoom(zoomLevel);
-    };
-
-    wavesurfer.on('ready', function () {
-        var duration = wavesurfer.getDuration();
-        // Show duration of track.
-        $('#current').text('00:00:00:00');
-        $('#total').text(formatTime(duration));
-        //wavesurfer.play();
-
-        // Show the progress of the track in time.
-        clearInterval(timer);
-        timer = setInterval(function () {
-            $('#current').text(formatTime(wavesurfer.getCurrentTime()));
-        }, 1000);
-
-        var timeline = Object.create(WaveSurfer.Timeline);
-
-        timeline.init({
-            wavesurfer: wavesurfer,
-            container: '#waveform-timeline'
-        });
-    });
-
-</script>-->
 <script>
     $(function () {
         $('#upload-file-btn').click(function () {
