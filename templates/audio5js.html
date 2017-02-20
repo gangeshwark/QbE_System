@@ -20,7 +20,7 @@
     <style>
         .demo-card-square.mdl-card {
             width: 320px;
-            height: 320px;
+            height: 600px;
         }
 
         .demo-list-two {
@@ -74,7 +74,7 @@
                         </div>
                         <button id="upload-file-btn" type="button"
                                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                            Upload
+                            Search
                         </button>
 
 
@@ -87,24 +87,46 @@
                                                 </button>-->
                     </fieldset>
                 </form>
+                <div id="search">
+                    <main class="mdl-layout__content">
 
-                <div id="search" class="demo-card-square mdl-card mdl-shadow--2dp">
-                    <div class="mdl-card__supporting-text">
-                        Search Results
-                    </div>
-                    <!-- Contact Chip -->
-
-                    <div>
                         <input type="hidden" value="10" id="seek_val"/>
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                            <thead>
+                            <tr>
+                            <span class="mdl-chip mdl-chip--contact" style="width: 200px">
+                        <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
+                        <span class="mdl-chip__text">Start time - Score</span>
+                        <a href="#" class="mdl-chip__action"><i class="material-icons">play_arrow</i></a>
+                    </span>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
+                                <td>25</td>
+                                <td>$2.90</td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+                                <td>50</td>
+                                <td>$1.25</td>
+                            </tr>
+                            <tr>
+                                <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
+                                <td>10</td>
+                                <td>$2.35</td>
+                            </tr>
+                            </tbody>
+                        </table>
                         <ul id="search_results" class="demo-list-two mdl-list">
                             <li class="mdl-list__item mdl-list__item--two-line">
                                 <span class="mdl-list__item-primary-content">
                                   <i class="material-icons mdl-list__item-avatar">1</i>
                                   <span>246</span>
-                                  <span class="mdl-list__item-sub-title">62 Episodes</span>
+                                  <span class="mdl-list__item-sub-title">Score: </span>
                                 </span>
                                 <span class="mdl-list__item-secondary-content">
-                                  <span class="mdl-list__item-secondary-info">Actor</span>
                                   <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">play_arrow</i></a>
                                 </span>
                             </li>
@@ -120,9 +142,17 @@
                             <span class="mdl-chip__text">Start - Score</span>
                             <a href="#" class="mdl-chip__action" onclick="setSeek(100)"><i class="material-icons">play_arrow</i></a>
                         </span>-->
+                    </main>
+                </div>
+                <!--
+                <div id="search" class="demo-card-square mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__supporting-text">
+                        Search Results
                     </div>
 
-                </div>
+
+
+                </div>-->
 
 
             </div>
