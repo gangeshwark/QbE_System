@@ -97,6 +97,8 @@
                 <div id="waveform-timeline"></div>
                 <div class="track" id="track-viz"></div>
                 <div class="track" id="track-play"></div>
+
+
             </div>
         </div>
         <footer class="demo-footer mdl-mini-footer">
@@ -180,7 +182,7 @@
 
         // insert the layer inside the 'main' track
         timeline.addLayer(waveformLayer, 'main');
-        timeline.addLayer(markerLayer, 'main');
+        //timeline.addLayer(markerLayer, 'main');
         // set the timeline's state to `BrushZoomState`
         timeline.state = new wavesUI.states.BrushZoomState(timeline);
 
