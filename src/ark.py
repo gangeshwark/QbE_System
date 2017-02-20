@@ -48,7 +48,8 @@ class ArkReader(object):
     # @param index index of the utterance that will be read
     # @return a numpy array containing the data from the utterance
     def read_utt_data(self, utt_name):
-        ark_read_buffer = open(self.scp_data[utt_name][0], 'rb')
+        import os
+        ark_read_buffer = open(os.path.abspath(self.scp_data[utt_name][0]), 'rb')
         ark_read_buffer.seek(int(self.scp_data[utt_name][1]), 0)
         header = struct.unpack('<xcccc', ark_read_buffer.read(5))
         if header[0].decode("utf-8") != "B":  # Tung comment: old code header[0] != "B"

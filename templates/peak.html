@@ -95,6 +95,10 @@
                 <h3>Corpus Audio</h3>
                 <div id="waveform"></div>
                 <div id="waveform-timeline"></div>
+                <div id="peaks-container"></div>
+                <audio>
+                    <source src="static/110101_000444_channel3.wav" type="audio/mpeg">
+                </audio>
                 <div class="track" id="track-viz"></div>
                 <div class="track" id="track-play"></div>
             </div>
@@ -123,77 +127,22 @@
 <script src="{{ url_for('static', filename='js/insert-code.js') }}"></script>
 <script src="{{ url_for('static', filename='js/waves-basic-controllers.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/waves-loaders.min.js') }}"></script>
+<script src="http://wzrd.in/standalone/peaks.js "></script>
 <script>
-    var sound = new Howl({
-        src: ['static/110101_000444_channel3.wav'],
-        sprite: {
-            blast: [30, 3000],
-            laser: [4000, 100000],
-            winner: [6000, 5000]
-        }
-    });
 
-    var loader = new wavesLoaders.AudioBufferLoader();
-
-    loader.load('static/110101_000444_channel3.wav').then(function (buffer) {
-        var $track = document.querySelector('#track-viz');
-        var width = $track.getBoundingClientRect().width;
-        var height = 200;
-        var duration = buffer.duration;
-        // define the numbr of pixels per seconds the timeline should display
-        var pixelsPerSecond = width / duration;
-        // create a timeline
-        var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
-        // create a new track into the `track-1` element and give it a id ('main')
-        timeline.createTrack($track, height, 'main');
-        var data = [
-            {time: 2, text: 'label 1'},
-            {time: 50, text: 'label 2'},
-            {time: 600, text: 'label 3'},
-            {time: 800, text: 'label 4'}
-        ];
-        // create the layer
-        var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
-            height: height
+    (function (Peaks) {
+        var myAudioContext = new AudioContext();
+        var p = Peaks.init({
+            container: document.querySelector('#peaks-container'),
+            mediaElement: document.querySelector('audio'),
+            audioContext: myAudioContext
         });
+        p.on('segments.ready', function () {
 
-        var markerLayer = new wavesUI.helpers.MarkerLayer(data, {
-            height: height,
-            displayHandlers: true,
-            color: 'red'
-        });
-        var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
-        markerLayer.setTimeContext(timeContext);
-        markerLayer.configureShape(wavesUI.shapes.AnnotatedMarker, {
-            x: function (d, v) {
-                if (v !== undefined) {
-                    d.time = v;
-                }
-                return d.time;
-            },
-            color: function () {
-                return 'orange';
-            }
-        });
-        markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());
+        })
+    })(peaks.js);
 
-
-        // insert the layer inside the 'main' track
-        timeline.addLayer(waveformLayer, 'main');
-        timeline.addLayer(markerLayer, 'main');
-        // set the timeline's state to `BrushZoomState`
-        timeline.state = new wavesUI.states.BrushZoomState(timeline);
-
-        timeline.tracks.render();
-        timeline.tracks.update();
-
-
-    }).catch(function (err) {
-        console.error(err.stack);
-    });
-    sound.play('laser');
 </script>
-
 <script>
     $(function () {
         $('#upload-file-btn').click(function () {

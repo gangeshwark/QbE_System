@@ -114,6 +114,9 @@ class AQSearch:
             # self.plot_plotly(matrix, path_xs, path_ys, path)
 
 
+        return matrix
+
+
 if __name__ == '__main__':
     c_wave_path = '/home/gangeshwark/PycharmProjects/AQSearch/data/my4Hellow.wav'
     q_wave_path = '/home/gangeshwark/PycharmProjects/AQSearch/data/queryHellow.wav'

@@ -3,6 +3,7 @@ import os
 
 from flask import Flask
 from flask import flash
+from flask import json
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -11,6 +12,7 @@ from flask import url_for
 from werkzeug.utils import secure_filename
 
 from feature_extractor.run import FeatureExtractor
+from src import model_bnf
 
 app = Flask(__name__)
 
@@ -22,7 +24,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def hello_world():
     data = "Hello World"
-    return render_template('test.html', name=data)
+    return render_template('peak.html', name=data)
 
 
 def allowed_file(filename):
@@ -48,11 +50,13 @@ def upload_audio():
             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(path)
             query_features_path = FeatureExtractor.bnf(path)
-            corpus_features_path = os.path.abspath('./corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
+            corpus_features_path = os.path.abspath('../corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
             print corpus_features_path, query_features_path
             os.chdir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-            print os.getcwd()
-            return url_for('upload_audio', filename=filename)
+            AQS = model_bnf.AQSearch(query_features_path, corpus_features_path)
+
+            matrix = AQS.search()
+            return json.dumps(matrix.tolist())
 
 
 @app.route('/static/<path:path>')
