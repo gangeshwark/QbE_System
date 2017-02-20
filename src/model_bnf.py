@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from src.spring_new import SpringDTW
 from src.readArk import read_scp
@@ -40,7 +39,7 @@ class AQSearch:
             for c in xrange(matrix.shape[1]):
                 new_matrix[r][c] = (((matrix[r][c] - old_min) * (new_max - new_min)) / (old_max - old_min)) + new_min
         return new_matrix
-
+    '''
     def plot_distance(self, matrix, path_xs, path_ys):
         """
         Plots the distance matrix
@@ -67,7 +66,7 @@ class AQSearch:
         for x in xrange(len(path_xs)):
             plt.plot(path_xs[x], path_ys[x])
         plt.show()
-
+    '''
     # TODO: Add the method to flip the paths too
     @staticmethod
     def flip(matrix):
@@ -108,7 +107,7 @@ class AQSearch:
             path_xs.append(path_x)
             path_ys.append(path_y)
 
-        return matrix
+        return matrix, top_k
 
 
 if __name__ == '__main__':

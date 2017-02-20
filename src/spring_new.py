@@ -1,6 +1,5 @@
 import numpy as np
 from scipy import spatial
-import matplotlib.pyplot as plt
 
 from src.readArk import read_scp
 

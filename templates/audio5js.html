@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}"/>
+    <!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/prism.css') }}"/>
+-->
 
     <title>Query by Example : Demo</title>
 
@@ -20,6 +21,10 @@
         .demo-card-square.mdl-card {
             width: 320px;
             height: 320px;
+        }
+
+        .demo-list-two {
+            width: 300px;
         }
     </style>
 </head>
@@ -57,23 +62,55 @@
                 <h3>Query Audio</h3>
                 <form id="upload-file" method="post" enctype="multipart/form-data">
                     <fieldset>
-                        <label for="file">Select an audio file</label>
-                        <input name="file" type="file">
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
+                            <input class="mdl-textfield__input" placeholder="Upload Audio File" type="text"
+                                   id="uploadFile" readonly/>
+                            <div class="mdl-button mdl-button--primary mdl-button--icon mdl-button--file">
+                                <i class="material-icons">attach_file</i><input type="file" id="uploadBtn" name="file">
+                            </div>
+
+                        </div>
                         <button id="upload-file-btn" type="button"
                                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Upload
                         </button>
+
+
+                        <!--
+                                                <label for="file">Select an audio file</label>
+                                                <input name="file" type="file">
+                                                <button id="upload-file-btn" type="button"
+                                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                                    Upload
+                                                </button>-->
                     </fieldset>
                 </form>
 
-                <div class="demo-card-square mdl-card mdl-shadow--2dp">
+                <div id="search" class="demo-card-square mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__supporting-text">
                         Search Results
                     </div>
                     <!-- Contact Chip -->
 
-                    <div id="search_results">
-                        <span class="mdl-chip mdl-chip--contact" style="width: 200px">
+                    <div>
+                        <input type="hidden" value="10" id="seek_val"/>
+                        <ul id="search_results" class="demo-list-two mdl-list">
+                            <li class="mdl-list__item mdl-list__item--two-line">
+                                <span class="mdl-list__item-primary-content">
+                                  <i class="material-icons mdl-list__item-avatar">1</i>
+                                  <span>246</span>
+                                  <span class="mdl-list__item-sub-title">62 Episodes</span>
+                                </span>
+                                <span class="mdl-list__item-secondary-content">
+                                  <span class="mdl-list__item-secondary-info">Actor</span>
+                                  <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">play_arrow</i></a>
+                                </span>
+                            </li>
+
+                        </ul>
+                        <!--<span class="mdl-chip mdl-chip--contact" style="width: 200px">
                             <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
                             <span class="mdl-chip__text">Start time - Score</span>
                             <a href="#" class="mdl-chip__action"><i class="material-icons">play_arrow</i></a>
@@ -81,8 +118,8 @@
                         <span class="mdl-chip mdl-chip--contact" style="width: 200px">
                             <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
                             <span class="mdl-chip__text">Start - Score</span>
-                            <a href="#" class="mdl-chip__action"><i class="material-icons">play_arrow</i></a>
-                        </span>
+                            <a href="#" class="mdl-chip__action" onclick="setSeek(100)"><i class="material-icons">play_arrow</i></a>
+                        </span>-->
                     </div>
 
                 </div>
@@ -93,20 +130,30 @@
             <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
 
                 <h3>Corpus Audio</h3>
-                <div id="waveform"></div>
-                <div id="waveform-timeline"></div>
+                <div class="track" id="track-viz"></div>
+
+                <audio id="audio" src="static/110101_000444_channel3.wav" preload="auto"></audio>
+                <div id="time">--:--/--:--</div>
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="play">
+                    <i class="material-icons" href="" title="play">play_arrow</i>Play
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="pause">
+                    <i class="material-icons" href="" title="Pause">pause</i>Pause
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="seek">
+                    <i class="material-icons" href="" title="Pause">pause</i>Seek
+                </button>
+
+
                 <div class="track" id="track-viz"></div>
                 <div class="track" id="track-play"></div>
-
-
             </div>
         </div>
         <footer class="demo-footer mdl-mini-footer">
             <div class="mdl-mini-footer--left-section">
                 <ul class="mdl-mini-footer--link-list">
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Privacy and Terms</a></li>
-                    <li><a href="#">User Agreement</a></li>
+                    <li><a href="#">Made with <a>love</a> at NTU.</a></li>
+
                 </ul>
             </div>
         </footer>
@@ -125,17 +172,83 @@
 <script src="{{ url_for('static', filename='js/insert-code.js') }}"></script>
 <script src="{{ url_for('static', filename='js/waves-basic-controllers.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/waves-loaders.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/audio5.js') }}"></script>
 <script>
-    var sound = new Howl({
-        src: ['static/110101_000444_channel3.wav'],
-        sprite: {
-            blast: [30, 3000],
-            laser: [4000, 100000],
-            winner: [6000, 5000]
+    document.getElementById("uploadBtn").onchange = function () {
+        document.getElementById("uploadFile").value = this.files[0].name;
+    };
+
+    jQuery(document).ready(function () {
+        $("#search").hide();
+        $("#play").show();
+        $("#seek").hide();
+        $("#pause").hide();
+
+    });
+    var play = document.getElementById('play');
+    var pause = document.getElementById('pause');
+
+    var seek = document.getElementById('seek');
+    var search_results = document.getElementById('search_results');
+
+
+    var playPause = function () {
+        if (this.playing) {
+            this.pause();
+            $("#pause").hide();
+            $("#play").show();
+        }
+        else {
+            this.play();
+            $("#play").hide();
+            $("#pause").show();
+        }
+        this[this.playing ? 'pause' : 'play']();
+        // or simply call this.playPause();
+    };
+    function setSeek(data) {
+        $("#seek_val").val(data);
+        $('#seek').trigger('click');
+    }
+
+    var moveTo = function () {
+        var seek_val = $("#seek_val").val();
+        console.log(seek_val);
+        this.seek(seek_val);
+        if (!this.playing) {
+            this.play();
+        }
+
+    };
+    var audio5js = new Audio5js({
+        swf_path: '{{ url_for('static', filename='swf/audio5js.swf') }}',
+        throw_errors: true,
+        format_time: true,
+        ready: function (player) {
+            console.log(player);
+            this.load('static/110101_000444_channel3.wav');
+            //this.play();
+            $("#pause").hide();
+            $("#play").show();
+            play.addEventListener('click',
+                    playPause.bind(this));
+            pause.addEventListener('click',
+                    playPause.bind(this));
+            seek.addEventListener('click',
+                    moveTo.bind(this));
+            this.on('timeupdate', function (position, duration) {
+                //console.log(position+'/'+duration);
+                $("#time").text(position + '/' + duration);
+            }, this);
+
         }
     });
 
+
+</script>
+<script>
     var loader = new wavesLoaders.AudioBufferLoader();
+
 
     loader.load('static/110101_000444_channel3.wav').then(function (buffer) {
         var $track = document.querySelector('#track-viz');
@@ -179,10 +292,25 @@
         });
         markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());
 
+        var cursorLayer = new wavesUI.helpers.CursorLayer({
+            height: height
+        });
+
 
         // insert the layer inside the 'main' track
         timeline.addLayer(waveformLayer, 'main');
-        //timeline.addLayer(markerLayer, 'main');
+        timeline.addLayer(markerLayer, 'main');
+        timeline.addLayer(cursorLayer, 'main');
+
+        // listen for time passing...
+        (function loop() {
+            var currentTime = new Date().getTime() / 1000;
+            cursorLayer.currentPosition = currentTime % duration;
+            cursorLayer.update();
+
+            //requestAnimationFrame(loop);
+        }());
+
         // set the timeline's state to `BrushZoomState`
         timeline.state = new wavesUI.states.BrushZoomState(timeline);
 
@@ -193,10 +321,7 @@
     }).catch(function (err) {
         console.error(err.stack);
     });
-    sound.play('laser');
-</script>
 
-<script>
     $(function () {
         $('#upload-file-btn').click(function () {
             showLoading();
@@ -209,12 +334,24 @@
                 contentType: false,
                 cache: false,
                 processData: false,
-                async: false,
+                async: true,
                 success: function (data) {
 
                     console.log('Success!\n');
                     var matrix = JSON.parse(data);
-                    console.log(matrix[0]);
+                    for (i = 0; i < matrix.length; i++) {
+                        d = matrix[i];
+                        var s_t = d[0];
+                        var val = d[2];
+                        s = '<span class="mdl-chip mdl-chip--contact" style="width: 200px">\
+                            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">' + (i + 1) + '</span>\
+                            <span class="mdl-chip__text">' + s_t + ' : ' + val + '</span>\
+                            <a href="#" class="mdl-chip__action" onclick="setSeek(' + s_t + ')"><i class="material-icons">play_arrow</i></a>\
+                            </span>';
+                        $("#search_results").append(s);
+                    }
+                    $("#search").show();
+                    console.log(matrix);
                     hideLoading();
                 },
                 fail: function (data) {

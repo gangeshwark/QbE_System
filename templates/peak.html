@@ -99,7 +99,18 @@
 
                 <div id="peaks-container"></div>
 
-                <audio src="static/110101_000444_channel3.wav" preload="auto"></audio>
+                <audio id="audio" src="static/110101_000444_channel3.wav" preload="auto"></audio>
+
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="play">
+                    <i class="material-icons" href="" title="play">play_arrow</i>Play
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="pause">
+                    <i class="material-icons" href="" title="Pause">pause</i>Pause
+                </button>
+                <button class="mdl-button mdl-js-button mdl-button--primary" id="seek">
+                    <i class="material-icons" href="" title="Pause">pause</i>Seek
+                </button>
+
 
                 <div class="track" id="track-viz"></div>
                 <div class="track" id="track-play"></div>
@@ -108,9 +119,8 @@
         <footer class="demo-footer mdl-mini-footer">
             <div class="mdl-mini-footer--left-section">
                 <ul class="mdl-mini-footer--link-list">
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">Privacy and Terms</a></li>
-                    <li><a href="#">User Agreement</a></li>
+                    <li><a href="#">Made with <a>love</a> at NTU.</a></li>
+
                 </ul>
             </div>
         </footer>
@@ -131,9 +141,51 @@
 <script src="{{ url_for('static', filename='js/waves-loaders.min.js') }}"></script>
 <script src="{{ url_for('static', filename='audiojs/audio.min.js') }}"></script>
 <script>
-  audiojs.events.ready(function() {
-    var as = audiojs.createAll();
-  });
+    var a = audiojs;
+    a.events.ready(function () {
+        var as = audiojs.createAll();
+    });
+    a.loadProgress.apply
+    jQuery(document).ready(function () {
+        play = $('#play');
+        pause = $('#pause');
+        mute = $('#mute');
+        muted = $('#muted');
+        close = $('#close');
+        pause.hide();
+
+        //song = new Audio('static/110101_000444_channel3.wav');
+        song = document.getElementById('audio');
+        duration = song.duration;
+        console.log("Duration" + duration);
+        if (song.canPlayType('audio/wav;')) {
+            song.type = 'audio/wav';
+            song.src = 'static/110101_000444_channel3.wav';
+        }
+        play.on('click', function (e) {
+            e.preventDefault();
+            song.play();
+
+            //$(this).replaceWith('<button class="mdl-button mdl-js-button mdl-button--primary" id="pause"><i class="material-icons"  href="" title="Pause">pause</i>Pause</button>');
+            $('#seek').attr('max', song.duration);
+            play.hide();
+            pause.show();
+        });
+
+        pause.on('click', function (e) {
+            e.preventDefault();
+            song.pause();
+            //  $(this).replaceWith('<button class="mdl-button mdl-js-button mdl-button--primary" id="play"><i class="material-icons" href="" title="play">play_arrow</i>Play</button>');
+            pause.hide();
+            play.show();
+        });
+        $("#seek").on("click", function (e) {
+            e.preventDefault();
+            song.currentTime = 1000;
+            song.play();
+        });
+    });
+
 </script>
 <!--
 <script>
