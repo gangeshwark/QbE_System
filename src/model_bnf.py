@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-import plotly as py
-import plotly.graph_objs as go
 import numpy as np
 from src.spring_new import SpringDTW
 from src.readArk import read_scp
@@ -109,10 +107,6 @@ class AQSearch:
                 path_y.append(point[1])
             path_xs.append(path_x)
             path_ys.append(path_y)
-
-            # self.plot_distance(matrix, path_xs, path_ys)
-            # self.plot_plotly(matrix, path_xs, path_ys, path)
-
 
         return matrix
 
