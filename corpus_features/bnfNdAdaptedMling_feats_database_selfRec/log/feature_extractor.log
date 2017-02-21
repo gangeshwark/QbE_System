@@ -1,0 +1,6 @@
+nnet-concat /home/ngaht/Desktop/Query_by_example/bnfExtr/hierbn-nd-train80k/final.feature_transform 'nnet-copy --remove-last-components=4 /home/ngaht/Desktop/Query_by_example/bnfExtr/hierbn-nd-train80k/final.nnet - |' /home/ngaht/Desktop/Query_by_example/bnfExtr/query-by-example/feats_folder/bnfNdAdaptedMling_feats_database/feature_extractor.nnet 
+LOG (nnet-concat[5.0.8-f6469]:main():nnet-concat.cc:53) Reading /home/ngaht/Desktop/Query_by_example/bnfExtr/hierbn-nd-train80k/final.feature_transform
+LOG (nnet-concat[5.0.8-f6469]:main():nnet-concat.cc:65) Concatenating nnet-copy --remove-last-components=4 /home/ngaht/Desktop/Query_by_example/bnfExtr/hierbn-nd-train80k/final.nnet - |
+nnet-copy --remove-last-components=4 /home/ngaht/Desktop/Query_by_example/bnfExtr/hierbn-nd-train80k/final.nnet - 
+LOG (nnet-copy[5.0.8-f6469]:main():nnet-copy.cc:145) Written 'nnet1' to -
+LOG (nnet-concat[5.0.8-f6469]:main():nnet-concat.cc:82) Written model to /home/ngaht/Desktop/Query_by_example/bnfExtr/query-by-example/feats_folder/bnfNdAdaptedMling_feats_database/feature_extractor.nnet

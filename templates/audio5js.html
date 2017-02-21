@@ -145,7 +145,8 @@
                 <h3>Corpus Audio</h3>
                 <div class="track" id="track-viz"></div>
 
-                <audio id="audio" src="static/110101_000444_channel3.wav" preload="auto"></audio>
+                <!--<audio id="audio" src="static/110101_000444_channel3.wav" preload="auto"></audio>-->
+                <audio id="audio" src="static/my4Hellow.wav" preload="auto"></audio>
                 <div id="time">--:--/--:--</div>
                 <button class="mdl-button mdl-js-button mdl-button--primary" id="play">
                     <i class="material-icons" href="" title="play">play_arrow</i>Play
@@ -241,16 +242,17 @@
         format_time: true,
         ready: function (player) {
             console.log(player);
-            this.load('static/110101_000444_channel3.wav');
+            //this.load('static/110101_000444_channel3.wav');
+            this.load('static/my4Hellow.wav');
             //this.play();
             $("#pause").hide();
             $("#play").show();
             play.addEventListener('click',
-                    playPause.bind(this));
+                playPause.bind(this));
             pause.addEventListener('click',
-                    playPause.bind(this));
+                playPause.bind(this));
             seek.addEventListener('click',
-                    moveTo.bind(this));
+                moveTo.bind(this));
             this.on('timeupdate', function (position, duration) {
                 //console.log(position+'/'+duration);
                 $("#time").text(position + '/' + duration);
@@ -263,10 +265,10 @@
 </script>
 <script>
     var loader = new wavesLoaders.AudioBufferLoader();
-    var timeline ;
+    var timeline;
     var track;
 
-    loader.load('static/110101_000444_channel3.wav').then(function (buffer) {
+    loader.load('static/my4Hellow.wav').then(function (buffer) {
         var $track = document.querySelector('#track-viz');
         var width = $track.getBoundingClientRect().width;
         var height = 300;
@@ -316,8 +318,8 @@
 
         // insert the layer inside the 'main' track
         timeline.addLayer(waveformLayer, 'main');
-        timeline.addLayer(markerLayer, 'main');
-        timeline.addLayer(cursorLayer, 'main');
+        //timeline.addLayer(markerLayer, 'main');
+        //timeline.addLayer(cursorLayer, 'main');
 
         // listen for time passing...
         (function loop() {
@@ -339,18 +341,14 @@
         console.error(err.stack);
     });
 
-    function draw_bound(duration) {
+    function draw_bound(duration, markersA) {
         console.log("T");
         console.log(timeline);
+        console.log(markersA);
         var $track = document.querySelector('#track-viz');
         var width = $track.getBoundingClientRect().width;
         var height = 300;
-        var data = [
-            {time: 2, text: 'label 1'},
-            {time: 5, text: 'label 2'},
-            {time: 6, text: 'label 3'},
-            {time: 8, text: 'label 4'},
-        ];
+
 
         var pixelsPerSecond = width / duration;
 
@@ -360,10 +358,10 @@
         var t = timeline.getTrackById('main');
         console.log("Track");
         console.log(t);
-        timeline.createTrack($track, height, 'main1');
+        //timeline.createTrack($track, height, 'main1');
 
 
-        var markerLayer = new wavesUI.core.Layer('collection', data, {
+        var markerLayer = new wavesUI.core.Layer('collection', markersA, {
             height: height
         });
 
@@ -386,7 +384,7 @@
 
         timeline.state = new wavesUI.states.SimpleEditionState(timeline);
 
-        timeline.addLayer(markerLayer);
+        timeline.addLayer(markerLayer, t);
         //timeline.add(track);
 
         timeline.tracks.render();
@@ -397,6 +395,7 @@
     $(function () {
         $('#upload-file-btn').click(function () {
             showLoading();
+            var markersA = Array();
 
             var form_data = new FormData($('#upload-file')[0]);
             $.ajax({
@@ -413,9 +412,13 @@
                     var matrix = JSON.parse(data);
                     for (i = 0; i < matrix.length; i++) {
                         d = matrix[i];
-                        var s_t = d[0];
+                        var s_t = d[0]/100;
                         var val = d[2];
-                        data = 0
+                        var dict = {};
+                        dict.time = s_t;
+                        dict.text = i+1;
+                        markersA[i] = dict;
+
                         /*s = '<span class="mdl-chip mdl-chip--contact" style="width: 200px">\
                          <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">' + (i + 1) + '</span>\
                          <span class="mdl-chip__text">' + s_t + ' : ' + val + '</span>\
@@ -431,7 +434,7 @@
                         $("#search_results").append(s);
 
                     }
-                    draw_bound($("#duration").val());
+                    draw_bound($("#duration").val(), markersA);
                     $("#search").show();
                     console.log(matrix);
                     hideLoading();

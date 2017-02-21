@@ -1,0 +1,1 @@
+/home/ngaht/Desktop/Query_by_example/bnfExtr/query-by-example/data/sample_database
