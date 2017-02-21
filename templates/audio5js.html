@@ -263,7 +263,8 @@
 </script>
 <script>
     var loader = new wavesLoaders.AudioBufferLoader();
-
+    var timeline ;
+    var track;
 
     loader.load('static/110101_000444_channel3.wav').then(function (buffer) {
         var $track = document.querySelector('#track-viz');
@@ -274,7 +275,7 @@
         // define the numbr of pixels per seconds the timeline should display
         var pixelsPerSecond = width / duration;
         // create a timeline
-        var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+        timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
         // create a new track into the `track-1` element and give it a id ('main')
         timeline.createTrack($track, height, 'main');
         var data = [
@@ -339,11 +340,11 @@
     });
 
     function draw_bound(duration) {
+        console.log("T");
+        console.log(timeline);
         var $track = document.querySelector('#track-viz');
         var width = $track.getBoundingClientRect().width;
-        var height = 200;
-
-
+        var height = 300;
         var data = [
             {time: 2, text: 'label 1'},
             {time: 5, text: 'label 2'},
@@ -353,9 +354,14 @@
 
         var pixelsPerSecond = width / duration;
 
-        var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
-        var track = new wavesUI.core.Track($track, height);
-        var track = wavesUI.core;
+        //var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+        //var track = new wavesUI.core.Track($track, height);
+
+        var t = timeline.getTrackById('main');
+        console.log("Track");
+        console.log(t);
+        timeline.createTrack($track, height, 'main1');
+
 
         var markerLayer = new wavesUI.core.Layer('collection', data, {
             height: height
@@ -380,8 +386,8 @@
 
         timeline.state = new wavesUI.states.SimpleEditionState(timeline);
 
-        track.add(markerLayer);
-        timeline.add(track);
+        timeline.addLayer(markerLayer);
+        //timeline.add(track);
 
         timeline.tracks.render();
         timeline.tracks.update();
