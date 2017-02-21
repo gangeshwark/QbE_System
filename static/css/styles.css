@@ -61,7 +61,7 @@
 
 .demo-content {
   border-radius: 2px;
-  padding: 80px 56px;
+  padding: 1px 20px 10px 20px;
   margin-bottom: 80px;
 }
 
@@ -70,7 +70,8 @@
 }
 
 .demo-content h3 {
-  margin-top: 48px;
+  margin-top: 44px;
+    text-align: center;
 }
 
 .demo-footer {

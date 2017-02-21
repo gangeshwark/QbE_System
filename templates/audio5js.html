@@ -62,8 +62,6 @@
                 <h3>Query Audio</h3>
                 <form id="upload-file" method="post" enctype="multipart/form-data">
                     <fieldset>
-
-
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--file">
                             <input class="mdl-textfield__input" placeholder="Upload Audio File" type="text"
                                    id="uploadFile" readonly/>
@@ -72,6 +70,7 @@
                             </div>
 
                         </div>
+                        <br/>
                         <button id="upload-file-btn" type="button"
                                 class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                             Search
@@ -87,39 +86,27 @@
                                                 </button>-->
                     </fieldset>
                 </form>
+                <p></p>
                 <div id="search">
                     <main class="mdl-layout__content">
 
                         <input type="hidden" value="10" id="seek_val"/>
-                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                        <input type="hidden" value="10" id="duration"/>
+
+                        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="align-items: center">
                             <thead>
                             <tr>
-                            <span class="mdl-chip mdl-chip--contact" style="width: 200px">
-                        <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
-                        <span class="mdl-chip__text">Start time - Score</span>
-                        <a href="#" class="mdl-chip__action"><i class="material-icons">play_arrow</i></a>
-                    </span>
+                                <th></th>
+                                <th>Start Time (secs)</th>
+                                <th class="mdl-data-table__header--sorted-descending">Score</th>
+                                <th class="mdl-data-table__cell--non-numeric">Play</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
-                                <td>25</td>
-                                <td>$2.90</td>
-                            </tr>
-                            <tr>
-                                <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
-                                <td>50</td>
-                                <td>$1.25</td>
-                            </tr>
-                            <tr>
-                                <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
-                                <td>10</td>
-                                <td>$2.35</td>
-                            </tr>
+                            <tbody id="search_results">
+
                             </tbody>
                         </table>
-                        <ul id="search_results" class="demo-list-two mdl-list">
+                        <!--<ul id="search_results" class="demo-list-two mdl-list">
                             <li class="mdl-list__item mdl-list__item--two-line">
                                 <span class="mdl-list__item-primary-content">
                                   <i class="material-icons mdl-list__item-avatar">1</i>
@@ -132,11 +119,7 @@
                             </li>
 
                         </ul>
-                        <!--<span class="mdl-chip mdl-chip--contact" style="width: 200px">
-                            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
-                            <span class="mdl-chip__text">Start time - Score</span>
-                            <a href="#" class="mdl-chip__action"><i class="material-icons">play_arrow</i></a>
-                        </span>
+
                         <span class="mdl-chip mdl-chip--contact" style="width: 200px">
                             <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">1</span>
                             <span class="mdl-chip__text">Start - Score</span>
@@ -247,6 +230,8 @@
         this.seek(seek_val);
         if (!this.playing) {
             this.play();
+            $("#play").hide();
+            $("#pause").show();
         }
 
     };
@@ -285,6 +270,7 @@
         var width = $track.getBoundingClientRect().width;
         var height = 300;
         var duration = buffer.duration;
+        $("#duration").val(duration);
         // define the numbr of pixels per seconds the timeline should display
         var pixelsPerSecond = width / duration;
         // create a timeline
@@ -352,6 +338,56 @@
         console.error(err.stack);
     });
 
+    function draw_bound(duration) {
+        var $track = document.querySelector('#track-viz');
+        var width = $track.getBoundingClientRect().width;
+        var height = 200;
+
+
+        var data = [
+            {time: 2, text: 'label 1'},
+            {time: 5, text: 'label 2'},
+            {time: 6, text: 'label 3'},
+            {time: 8, text: 'label 4'},
+        ];
+
+        var pixelsPerSecond = width / duration;
+
+        var timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
+        var track = new wavesUI.core.Track($track, height);
+        var track = wavesUI.core;
+
+        var markerLayer = new wavesUI.core.Layer('collection', data, {
+            height: height
+        });
+
+        var timeContext = new wavesUI.core.LayerTimeContext(timeline.timeContext);
+
+        markerLayer.setTimeContext(timeContext);
+        markerLayer.configureShape(wavesUI.shapes.AnnotatedMarker, {
+            x: function (d, v) {
+                if (v !== undefined) {
+                    d.time = v;
+                }
+                return d.time;
+            },
+            color: function () {
+                return 'orange';
+            }
+        });
+
+        markerLayer.setBehavior(new wavesUI.behaviors.MarkerBehavior());
+
+        timeline.state = new wavesUI.states.SimpleEditionState(timeline);
+
+        track.add(markerLayer);
+        timeline.add(track);
+
+        timeline.tracks.render();
+        timeline.tracks.update();
+
+    }
+
     $(function () {
         $('#upload-file-btn').click(function () {
             showLoading();
@@ -373,13 +409,22 @@
                         d = matrix[i];
                         var s_t = d[0];
                         var val = d[2];
-                        s = '<span class="mdl-chip mdl-chip--contact" style="width: 200px">\
-                            <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">' + (i + 1) + '</span>\
-                            <span class="mdl-chip__text">' + s_t + ' : ' + val + '</span>\
-                            <a href="#" class="mdl-chip__action" onclick="setSeek(' + s_t + ')"><i class="material-icons">play_arrow</i></a>\
-                            </span>';
+                        /*s = '<span class="mdl-chip mdl-chip--contact" style="width: 200px">\
+                         <span class="mdl-chip__contact mdl-color--teal mdl-color-text--white">' + (i + 1) + '</span>\
+                         <span class="mdl-chip__text">' + s_t + ' : ' + val + '</span>\
+                         <a href="#" class="mdl-chip__action" onclick="setSeek(' + s_t + ')"><i class="material-icons">play_arrow</i></a>\
+                         </span>';
+                         */
+                        s = '<tr>\
+                                <td>' + (i + 1) + '</td>\
+                                <td>' + s_t + ' secs</td>\
+                                <td>' + val + '</td>\
+                                <td class="mdl-data-table__cell--non-numeric" onclick="setSeek(' + s_t + ')"><a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">play_arrow</i></a></td>\
+                            </tr>';
                         $("#search_results").append(s);
+
                     }
+                    draw_bound($("#duration").val());
                     $("#search").show();
                     console.log(matrix);
                     hideLoading();
