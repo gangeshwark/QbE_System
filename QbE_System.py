@@ -21,12 +21,15 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/home/gangeshwark/PycharmProjects/QbE_System/uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'wav', 'mp3'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+small = 1
 
 
 @app.route('/')
 def hello_world():
-    data = "Hello World"
-    return render_template('audio5js.html', name=data)
+    if small:
+        return render_template('audio5js.html', audio_path='static/my4Hellow.wav')
+    else:
+        return render_template('audio5js.html', audio_path='static/110101_000444_channel3.wav')
 
 
 def allowed_file(filename):
@@ -45,7 +48,7 @@ def upload_audio():
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            #flash('No selected file')
+            # flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
 
@@ -54,7 +57,14 @@ def upload_audio():
             file.save(path)
 
             query_features_path = FeatureExtractor.bnf(path)
-            corpus_features_path = os.path.abspath('../corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
+
+            if small:
+                print small
+                corpus_features_path = os.path.abspath('../corpus_features/bnf_database/raw_bnfea_fbank_pitch.1.scp')
+            else:
+                print small
+                corpus_features_path = os.path.abspath(
+                    '../corpus_features/bnfNdAdaptedMling_feats_database_selfRec/raw_bnfea_database_fbank_pitch.1.scp')
             print corpus_features_path, query_features_path
             os.chdir(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
             AQS = model_bnf.AQSearch(query_features_path, corpus_features_path)
@@ -62,7 +72,7 @@ def upload_audio():
             matrix, top_k = AQS.search()
 
             print type(top_k)
-            return json.dumps(top_k)
+            return json.dumps({"top_k": top_k, "matrix": matrix.tolist()})
 
 
 @app.route('/static/<path:path>')
