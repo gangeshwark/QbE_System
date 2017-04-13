@@ -339,6 +339,7 @@
         timeline = new wavesUI.core.Timeline(pixelsPerSecond, width);
         // create a new track into the `track-1` element and give it a id ('main')
         timeline.createTrack($track, height, 'main');
+        timeline.createTrack($track, height, 'main1');
         var data = [
             {time: 2, text: 'label 1'},
             {time: 50, text: 'label 2'},
@@ -347,6 +348,9 @@
         ];
         // create the layer
         var waveformLayer = new wavesUI.helpers.WaveformLayer(buffer, {
+            height: height
+        });
+var waveformLayer1 = new wavesUI.helpers.WaveformLayer(buffer, {
             height: height
         });
 
@@ -377,6 +381,7 @@
 
         // insert the layer inside the 'main' track
         timeline.addLayer(waveformLayer, 'main');
+        timeline.addLayer(waveformLayer1, 'main1');
         //timeline.addLayer(markerLayer, 'main');
         //timeline.addLayer(cursorLayer, 'main');
 
@@ -504,9 +509,7 @@
                 fail: function (data) {
                     console.log('Fail!' + data);
                 }
-
             });
-
         });
     });
     onClickSeek = function () {

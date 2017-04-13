@@ -142,7 +142,7 @@ class SpringDTW:
                 self.dist_matrix[i][j] = distance_new[i]
 
             else:
-                distance_new[i] = spatial.distance.cosine(incoming_value, template[i]) + \
+                distance_new[i] = (spatial.distance.cosine(incoming_value, template[i])) + \
                                    min(distance_new[i - 1],
                                        distance_recent[i],
                                        distance_recent[i - 1])
