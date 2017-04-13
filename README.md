@@ -2,8 +2,11 @@
 An end-to-end system to search for a query word (audio format) in a huge corpus audio file.
 
 ## Running
-To start the server, use the following command:<br>
+1. To start the server, use the following command:<br>
 ```$ python QbE_System.py```
+
+2. Open the given link in the browser for GUI of the system.
+
 
 ## Requirements
 The system requires the following modules:<br>
